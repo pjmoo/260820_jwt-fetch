@@ -2,6 +2,8 @@ package org.example.jwtfetch.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.jwtfetch.auth.JwtProvider;
+import org.example.jwtfetch.auth.RefreshToken;
+import org.example.jwtfetch.auth.RefreshTokenRepository;
 import org.example.jwtfetch.domain.entity.UserAccount;
 import org.example.jwtfetch.domain.repository.UserAccountRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +29,8 @@ public class UserAccountService {
     private final JwtProvider jwtProvider;
 
     // 유저가 폼 등을 통해 입력하는 패스워드는 인코딩된 상태 X
-    public String login(String username, String rawPassword) {
+//    public String login(String username, String rawPassword) {
+    public TokenResult login(String username, String rawPassword) {
         // 유저가 존재하고, 그 유저의 패스워드가 입력한 패스워드와 일치하는가?
         UserAccount entity = userAccountRepository
                 // optional -> get / throw
@@ -37,6 +40,20 @@ public class UserAccountService {
             throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
         }
         // 토큰을 발부
-        return jwtProvider.issueToken(username);
+        // return jwtProvider.issueToken(username);
+        String accessToken = jwtProvider.issueToken(username);
+        JwtProvider.RefreshTokenDetail refreshTokenDetail
+                = jwtProvider.createRefreshToken(username);
+        refreshTokenRepository.save(RefreshToken.builder()
+                .jti(refreshTokenDetail.jti())
+                .username(username)
+                .ttl(refreshTokenDetail.ttl())
+                .build());
+        return new TokenResult(accessToken, refreshTokenDetail.token());
+    }
+
+    private final RefreshTokenRepository refreshTokenRepository;
+
+    public record TokenResult(String accessToken, String refreshToken) {
     }
 }

@@ -11,6 +11,7 @@ public record AuthProperties(
 ) {
     public record Jwt(
             String secretKey,
-            Duration accessTokenExpiry) {
+            Duration accessTokenExpiry,
+            Duration refreshTokenExpiry) {
     }
 }

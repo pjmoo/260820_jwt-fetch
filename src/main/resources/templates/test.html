@@ -10,5 +10,21 @@
 <body>
 <h1>JWT</h1>
 <h2>테스트</h2>
+<button id="logoutBtn">로그아웃</button>
+<script>
+    const logoutBtn = document.querySelector("#logoutBtn");
+    logoutBtn.addEventListener("click", async () => {
+        const response = await fetch("/logout", {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+            }
+        });
+        if (response.ok) { // 2xx <- 204(No Content)
+            localStorage.removeItem("accessToken"); // 쿠키도 지워짐
+            location.href = "/login";
+        }
+    });
+</script>
 </body>
 </html>

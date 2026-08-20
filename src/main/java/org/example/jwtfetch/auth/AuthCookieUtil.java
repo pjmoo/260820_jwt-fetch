@@ -12,6 +12,12 @@ import org.springframework.stereotype.Component;
 public class AuthCookieUtil {
     private final AuthProperties p;
 
+    public ResponseCookie deleteAccessTokenCookie() {
+        return ResponseCookie.from("accessToken", "")
+                .maxAge(0)
+                .build();
+    }
+
     public ResponseCookie createAccessTokenCookie(String token) {
         return ResponseCookie.from("accessToken", token)
                 // 보안
@@ -21,6 +27,16 @@ public class AuthCookieUtil {
                 .sameSite("Strict") // 같은 출처여야함
                 .path("/") // 똑같은 출처면 다 쓸 수 있게
                 .maxAge(p.jwt().accessTokenExpiry())
+                .build();
+    }
+
+    public ResponseCookie createRefreshTokenCookie(String token) {
+        return ResponseCookie.from("refreshToken", token)
+                .httpOnly(true)
+                .secure(true)
+                .sameSite("Strict")
+                .path("/")
+                .maxAge(p.jwt().refreshTokenExpiry())
                 .build();
     }
 }

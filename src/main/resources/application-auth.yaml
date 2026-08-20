@@ -4,6 +4,12 @@ app:
     jwt:
       secret-key: ${JWT_SECRET_KEY}
       access-token-expiry: 5m
+      refresh-token-expiry: 24h
+spring:
+  data:
+    redis:
+      url: ${AIVEN_REDIS_URL}
+      timeout: 2000ms
 ---
 spring:
   config:

@@ -19,6 +19,8 @@ repositories {
 }
 
 dependencies {
+    // --- Spring Data Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // --- jwt (jjwt)
     // Source: https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
     implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
