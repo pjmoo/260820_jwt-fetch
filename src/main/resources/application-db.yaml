@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${AIVEN_MYSQL_HOST}:${AIVEN_MYSQL_PORT}/${AIVEN_MYSQL_NAME}
+    username: ${AIVEN_MYSQL_USER}
+    password: ${AIVEN_MYSQL_PASSWORD}
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
