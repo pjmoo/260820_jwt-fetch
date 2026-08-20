@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JWT</title>
+</head>
+<body>
+<h1>JWT</h1>
+<h2>로그인</h2>
+<section>
+    <form id="loginForm">
+        <label>유저ID <input name="username"/></label><br>
+        <label>비밀번호 <input type="password" name="password"/></label><br>
+        <button>로그인</button>
+    </form>
+</section>
+<script>
+    const loginForm = document.querySelector("#loginForm");
+    loginForm.addEventListener("submit", async (evt) => {
+        evt.preventDefault();
+        const formData = new FormData(evt.target);
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(Object.fromEntries(formData))
+        });
+        const token = await response.text();
+        localStorage.setItem("accessToken", token); // 프런트엔드가 별도로 존재하는 경우에
+        // WebStorage -> XSS 공격에 취약하므로 -> 가능한 짧은 시간만 유지하거나 아니면 쿠키/상태관리 사용
+        // console.log(token);
+        location.href = "/test";
+    })
+</script>
+</body>
+</html>
